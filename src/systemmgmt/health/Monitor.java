@@ -25,7 +25,6 @@ public class Monitor {
 	    try {
 		while (_reader.next()) {
 		    final int type = _reader.readType();
-		    System.out.println("found fault");
 		    if (type == 1) {
 			_reader.readMessage(fault);
 			System.err.println("WARNING: Process with name " + fault.processName + " is not responding");

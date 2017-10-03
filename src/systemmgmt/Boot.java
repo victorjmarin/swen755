@@ -27,8 +27,25 @@ public class Boot {
 	    final int fileGarbage = jarPath.indexOf('/');
 	    jarPath = jarPath.substring(fileGarbage, jarPath.length());
 
+	    // Otherwise, start the specific process
+	    final String heartbeatFilename = jarPath.substring(0, jarPath.length() - 7) + "heartbeat_communication";
+	    final String monitorFilename = jarPath.substring(0, jarPath.length() - 7) + "monitor_communication";
+
 	    // First, check if this was the normal boot
 	    if (args.length == 0) {
+
+		// Remove old files
+		{
+		    final File file = new File(heartbeatFilename);
+		    if (file.exists()) {
+			file.delete();
+		    }
+		    final File file2 = new File(monitorFilename);
+		    if (file2.exists()) {
+			file2.delete();
+		    }
+		}
+
 		// Start all the processes
 		for (int i = 1; i <= 4; ++i) {
 		    final ProcessBuilder pb = new ProcessBuilder("java", "-jar", jarPath, "" + i);
@@ -48,24 +65,14 @@ public class Boot {
 		    ;
 	    }
 
-	    // Otherwise, start the specific process
-	    final String heartbeatFilename = jarPath.substring(0, jarPath.length() - 7) + "heartbeat_communication";
-	    final String monitorFilename = jarPath.substring(0, jarPath.length() - 7) + "monitor_communication";
-	    {
-		final File file = new File(heartbeatFilename);
-		if (file.exists()) {
-		    file.delete();
-		}
-	    }
-
 	    final int processName = Integer.parseInt(args[0]);
 
 	    switch (processName) {
 	    case 1:
-		new HeartbeatReceiver(heartbeatFilename, monitorFilename).run();
+		new Monitor(monitorFilename).run();
 		break;
 	    case 2:
-		new Monitor(monitorFilename).run();
+		new HeartbeatReceiver(heartbeatFilename, monitorFilename).run();
 		break;
 	    case 3:
 		new Controller(heartbeatFilename, 3).run();
