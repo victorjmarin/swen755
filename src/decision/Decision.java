@@ -2,15 +2,15 @@ package decision;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-import systemmgmt.health.HeartbeatClient;
+import systemmgmt.health.HeartbeatSender;
 
 public class Decision {
 
 	private static final int PROCESS_NAME = 3;
-	private HeartbeatClient _heartbeat;
+	private final HeartbeatSender _heartbeat;
 
-	public Decision(String heartbeatFilename, int pid) {
-		_heartbeat = new HeartbeatClient(heartbeatFilename, pid, PROCESS_NAME);
+	public Decision(final String heartbeatFilename, final int pid) {
+		_heartbeat = new HeartbeatSender(heartbeatFilename, pid, PROCESS_NAME);
 	}
 
 	public void run() {
@@ -23,14 +23,14 @@ public class Decision {
 
 			try {
 				Thread.sleep(500); // Pretend we are doing a long computation
-			} catch (InterruptedException e) {
+			} catch (final InterruptedException e) {
 			}
 		}
 	}
 
-	private void updateMotors(long newMotorSetpoint) {
+	private void updateMotors(final long newMotorSetpoint) {
 		System.out.println("Updating our decision " + newMotorSetpoint);
-		int noise = ThreadLocalRandom.current().nextInt(0, 20);
+		final int noise = ThreadLocalRandom.current().nextInt(0, 20);
 		System.out.println("Performing important division: " + newMotorSetpoint
 				/ noise);
 	}

@@ -2,15 +2,15 @@ package controller;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-import systemmgmt.health.HeartbeatClient;
+import systemmgmt.health.HeartbeatSender;
 
 public class Controller {
 
 	private static final int PROCESS_NAME = 1;
-	private HeartbeatClient _heartbeat;
+	private final HeartbeatSender _heartbeat;
 
-	public Controller(String heartbeatFilename, int pid) {
-		_heartbeat = new HeartbeatClient(heartbeatFilename, pid, PROCESS_NAME);
+	public Controller(final String heartbeatFilename, final int pid) {
+		_heartbeat = new HeartbeatSender(heartbeatFilename, pid, PROCESS_NAME);
 	}
 
 	public void run() {
@@ -22,15 +22,15 @@ public class Controller {
 			updateMotors(System.currentTimeMillis());
 
 			try {
-				Thread.sleep(500); // Pretend we are doing a long computation
-			} catch (InterruptedException e) {
+				Thread.sleep(400); // Pretend we are doing a long computation
+			} catch (final InterruptedException e) {
 			}
 		}
 	}
 
-	private void updateMotors(long newMotorSetpoint) {
+	private void updateMotors(final long newMotorSetpoint) {
 		System.out.println("Updating the motors to " + newMotorSetpoint);
-		int noise = ThreadLocalRandom.current().nextInt(0, 11);
+		final int noise = ThreadLocalRandom.current().nextInt(0, 11);
 		System.out.println("Ratio to noise: " + newMotorSetpoint / noise);
 	}
 }

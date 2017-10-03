@@ -1,6 +1,6 @@
 package perception;
 
-public interface AudioRecognition {
+public interface IAudioRecognition {
 
     /**
      * Recognizes sirens and horns in the environment.

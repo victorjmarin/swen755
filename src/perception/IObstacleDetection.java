@@ -4,7 +4,7 @@ import java.util.Set;
 
 import perception.object.EnvObject;
 
-public interface ObstacleDetection {
+public interface IObstacleDetection {
 
     /**
      * Given a set of environment objects, determines the subset of them that are

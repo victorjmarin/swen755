@@ -3,7 +3,7 @@ package perception;
 import perception.object.EnvObject;
 import perception.object.Light;
 
-public interface ObjectTracking {
+public interface IObjectTracking {
 
     /**
      * Tracks changes in the color of a traffic light

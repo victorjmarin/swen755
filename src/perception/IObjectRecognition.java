@@ -4,7 +4,7 @@ import java.util.List;
 
 import perception.object.EnvObject;
 
-public interface ObjectRecognition {
+public interface IObjectRecognition {
 
     /**
      * Scans the environment creating representations of the objects around.
