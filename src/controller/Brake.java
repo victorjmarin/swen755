@@ -4,12 +4,12 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import systemmgmt.health.HeartbeatSender;
 
-public class Controller {
+public class Brake implements IBrake {
 
 	private static final int PROCESS_NAME = 3;
 	private final HeartbeatSender _heartbeat;
 
-	public Controller(final String heartbeatFilename, final int pid) {
+	public Brake(final String heartbeatFilename, final int pid) {
 		_heartbeat = new HeartbeatSender(heartbeatFilename, pid, PROCESS_NAME);
 	}
 
@@ -19,7 +19,7 @@ public class Controller {
 			_heartbeat.sendHeartbeat();
 
 			// Send new values to the actuators
-			updateMotors(System.currentTimeMillis());
+			applyBrake(System.currentTimeMillis());
 
 			try {
 				Thread.sleep(500); // Pretend we are doing a long computation
@@ -28,9 +28,19 @@ public class Controller {
 		}
 	}
 
-	private void updateMotors(final long newMotorSetpoint) {
-		System.out.println("Updating the motors to " + newMotorSetpoint);
+	public void applyBrake(long Time) {
+		System.out.println("Brakes were applied at " + Time);
 		final int noise = ThreadLocalRandom.current().nextInt(0, 11);
-		System.out.println("Ratio to noise: " + newMotorSetpoint / noise);
+		System.out.println("Ratio to noise: " + Time / noise);
+	}
+	
+	public void releaseBrake()
+	{
+		
+	}
+	
+	public void jamBrake()
+	{
+	
 	}
 }

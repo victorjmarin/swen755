@@ -6,7 +6,7 @@ import java.lang.ProcessBuilder.Redirect;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
 
-import controller.Controller;
+import controller.Brake;
 import perception.ObstacleDetection;
 import systemmgmt.health.HeartbeatReceiver;
 import systemmgmt.health.Monitor;
@@ -75,7 +75,7 @@ public class Boot {
 		new HeartbeatReceiver(heartbeatFilename, monitorFilename).run();
 		break;
 	    case 3:
-		new Controller(heartbeatFilename, 3).run();
+		new Brake(heartbeatFilename, 3).run();
 		break;
 	    case 4:
 		new ObstacleDetection(heartbeatFilename, 4).run();
