@@ -1,5 +1,5 @@
 package decision;
 
-public Interface IDistanceMaintainance{
+public interface IDistanceMaintainance {
 
-} 
+}

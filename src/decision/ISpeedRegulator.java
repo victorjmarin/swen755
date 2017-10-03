@@ -1,5 +1,5 @@
 package decision;
 
-public Interface ISpeedRegulator{
+public interface ISpeedRegulator {
 
-} 
+}

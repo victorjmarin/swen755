@@ -1,5 +1,5 @@
 package decision;
 
-public Interface IReactToObject{
+public interface IReactToObject {
 
-} 
+}

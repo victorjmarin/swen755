@@ -1,5 +1,5 @@
 package decision;
 
-public Interface IParking{
+public interface IParking {
 
-} 
+}

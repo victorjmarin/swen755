@@ -1,5 +1,5 @@
 package decision;
 
-public Interface INavigationDecisions{
+public interface INavigationDecisions {
 
-} 
+}
