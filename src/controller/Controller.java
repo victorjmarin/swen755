@@ -22,7 +22,7 @@ public class Controller {
 			updateMotors(System.currentTimeMillis());
 
 			try {
-				Thread.sleep(400); // Pretend we are doing a long computation
+				Thread.sleep(500); // Pretend we are doing a long computation
 			} catch (final InterruptedException e) {
 			}
 		}

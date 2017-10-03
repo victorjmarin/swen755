@@ -7,8 +7,6 @@ import io.mappedbus.MappedBusWriter;
 
 public class HeartbeatSender implements IHeartbeatSender {
 
-    private int sendingInterval;
-
     MappedBusWriter _writer;
     int _pid;
     int _processName;
@@ -22,13 +20,6 @@ public class HeartbeatSender implements IHeartbeatSender {
 	} catch (final IOException e) {
 	    e.printStackTrace();
 	}
-//	final ScheduledThreadPoolExecutor sch = (ScheduledThreadPoolExecutor) Executors.newScheduledThreadPool(1);
-//	sch.scheduleAtFixedRate(new Runnable() {
-//	    @Override
-//	    public void run() {
-//		sendHeartbeat();
-//	    }
-//	}, 0, sendingInterval, TimeUnit.MILLISECONDS);
     }
 
     @Override
@@ -40,8 +31,4 @@ public class HeartbeatSender implements IHeartbeatSender {
 	}
     }
 
-    @Override
-    public int getName() {
-	return _processName;
-    }
 }

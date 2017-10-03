@@ -27,10 +27,6 @@ public class HeartbeatReceiver {
 	}
     }
 
-    public void registerClient(final IHeartbeatSender hbClient) {
-	_previousTimestamps.put(hbClient.getName(), System.currentTimeMillis());
-    }
-
     public void run() {
 	final Heartbeat heartbeat = new Heartbeat();
 	while (true) {
