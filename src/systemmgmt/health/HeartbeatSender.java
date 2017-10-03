@@ -4,6 +4,7 @@ import java.io.EOFException;
 import java.io.IOException;
 
 import io.mappedbus.MappedBusWriter;
+import systemmgmt.health.message.Heartbeat;
 
 public class HeartbeatSender implements IHeartbeatSender {
 

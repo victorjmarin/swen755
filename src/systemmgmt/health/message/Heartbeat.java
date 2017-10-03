@@ -1,4 +1,4 @@
-package systemmgmt.health;
+package systemmgmt.health.message;
 
 import io.mappedbus.MappedBusMessage;
 import io.mappedbus.MemoryMappedFile;

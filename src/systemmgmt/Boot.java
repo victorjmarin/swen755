@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import controller.Controller;
 import perception.ObstacleDetection;
 import systemmgmt.health.HeartbeatReceiver;
+import systemmgmt.health.Monitor;
 
 public class Boot {
 
@@ -29,7 +30,7 @@ public class Boot {
 	    // First, check if this was the normal boot
 	    if (args.length == 0) {
 		// Start all the processes
-		for (int i = 1; i < 4; ++i) {
+		for (int i = 1; i <= 4; ++i) {
 		    final ProcessBuilder pb = new ProcessBuilder("java", "-jar", jarPath, "" + i);
 		    pb.redirectOutput(Redirect.INHERIT);
 		    pb.redirectError(Redirect.INHERIT);
@@ -49,6 +50,7 @@ public class Boot {
 
 	    // Otherwise, start the specific process
 	    final String heartbeatFilename = jarPath.substring(0, jarPath.length() - 7) + "heartbeat_communication";
+	    final String monitorFilename = jarPath.substring(0, jarPath.length() - 7) + "monitor_communication";
 	    {
 		final File file = new File(heartbeatFilename);
 		if (file.exists()) {
@@ -60,13 +62,16 @@ public class Boot {
 
 	    switch (processName) {
 	    case 1:
-		new Controller(heartbeatFilename, 1).run();
+		new HeartbeatReceiver(heartbeatFilename, monitorFilename).run();
 		break;
 	    case 2:
-		new HeartbeatReceiver(heartbeatFilename).run();
+		new Monitor(monitorFilename).run();
 		break;
 	    case 3:
-		new ObstacleDetection(heartbeatFilename, 3).run();
+		new Controller(heartbeatFilename, 3).run();
+		break;
+	    case 4:
+		new ObstacleDetection(heartbeatFilename, 4).run();
 		break;
 	    }
 

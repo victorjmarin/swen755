@@ -6,7 +6,7 @@ import systemmgmt.health.HeartbeatSender;
 
 public class Controller {
 
-	private static final int PROCESS_NAME = 1;
+	private static final int PROCESS_NAME = 3;
 	private final HeartbeatSender _heartbeat;
 
 	public Controller(final String heartbeatFilename, final int pid) {

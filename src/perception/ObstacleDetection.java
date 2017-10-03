@@ -9,7 +9,7 @@ import systemmgmt.health.HeartbeatSender;
 
 public class ObstacleDetection implements IObstacleDetection {
 
-    private static final int PROCESS_NAME = 3;
+    private static final int PROCESS_NAME = 4;
     private final HeartbeatSender _heartbeat;
 
     public ObstacleDetection(final String heartbeatFilename, final int pid) {

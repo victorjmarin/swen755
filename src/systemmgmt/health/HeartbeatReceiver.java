@@ -5,23 +5,29 @@ import java.io.IOException;
 import java.util.HashMap;
 
 import io.mappedbus.MappedBusReader;
+import io.mappedbus.MappedBusWriter;
+import systemmgmt.health.message.Fault;
+import systemmgmt.health.message.Heartbeat;
 
 public class HeartbeatReceiver {
 
     static final int MAX_HEARTBEAT_DELAY = 1000;
 
     MappedBusReader _reader;
+    MappedBusWriter _writer;
 
     /**
      * Map processName to last known timestamp
      */
     HashMap<Integer, Long> _previousTimestamps;
 
-    public HeartbeatReceiver(final String filename) {
-	_reader = new MappedBusReader(filename, 100000L, 32);
+    public HeartbeatReceiver(final String heartbeatFile, final String monitorFile) {
+	_reader = new MappedBusReader(heartbeatFile, 100000L, 32);
+	_writer = new MappedBusWriter(monitorFile, 100000L, 32, true);
 	_previousTimestamps = new HashMap<Integer, Long>();
 	try {
 	    _reader.open();
+	    _writer.open();
 	} catch (final IOException e) {
 	    e.printStackTrace();
 	}
@@ -56,7 +62,11 @@ public class HeartbeatReceiver {
 	    final long currentTime = System.currentTimeMillis();
 	    for (final int processName : _previousTimestamps.keySet()) {
 		if (currentTime - _previousTimestamps.get(processName) > MAX_HEARTBEAT_DELAY) {
-		    System.err.println("WARNING: Process with name " + processName + " is not responding");
+		    try {
+			_writer.write(new Fault(processName));
+		    } catch (final EOFException e) {
+			e.printStackTrace();
+		    }
 		}
 	    }
 	}
