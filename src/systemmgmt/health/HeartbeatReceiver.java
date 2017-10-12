@@ -3,7 +3,6 @@ package systemmgmt.health;
 import java.io.EOFException;
 import java.io.IOException;
 import java.util.HashMap;
-
 import io.mappedbus.MappedBusReader;
 import io.mappedbus.MappedBusWriter;
 import systemmgmt.health.message.Fault;
@@ -69,6 +68,6 @@ public class HeartbeatReceiver {
 		    }
 		}
 	    }
-	}
     }
+  }
 }
