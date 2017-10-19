@@ -30,9 +30,9 @@ public class ObstacleDetection implements IObstacleDetection {
 
   @Override
   public Set<EnvObject> detectObstacles(final Set<EnvObject> objects) {
-    final int rnd = ThreadLocalRandom.current().nextInt(0, 11);
+    final int rnd = ThreadLocalRandom.current().nextInt(0, 21);
     try {
-      Thread.sleep(400);
+      Thread.sleep(500);
     } catch (final InterruptedException e) {
       e.printStackTrace();
     }
