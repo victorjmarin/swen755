@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.lang.ProcessBuilder.Redirect;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
-
 import controller.Brake;
 import perception.ObstacleDetection;
 import systemmgmt.health.HeartbeatReceiver;
