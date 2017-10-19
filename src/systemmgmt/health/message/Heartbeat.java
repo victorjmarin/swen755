@@ -43,4 +43,5 @@ public class Heartbeat implements MappedBusMessage {
   public int type() {
     return MessageType.HEARTBEAT.ordinal();
   }
+
 }

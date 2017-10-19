@@ -86,7 +86,7 @@ public class HBReceiver {
     }
   }
 
-  private void receiveHeartbeat(final String sender, final String group) {
+  private synchronized void receiveHeartbeat(final String sender, final String group) {
     ScheduledFuture<?> lossDetector = lossDetectors.remove(sender);
     System.out.println("[HBReceiver] Heartbeat received from " + sender);
     if (lossDetector != null)
@@ -97,7 +97,7 @@ public class HBReceiver {
     }
   }
 
-  private void died(final String sender, final String group) {
+  private synchronized void died(final String sender, final String group) {
     final NodeGroup ng = nodeGroups.get(group);
     System.out.println("[HBReceiver] " + sender + " has died. Rebooting it...");
     Boot.spawnFor(sender);

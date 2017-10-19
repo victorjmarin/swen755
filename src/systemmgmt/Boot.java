@@ -33,6 +33,8 @@ public class Boot {
 
     final Thread destroyProcesses = new Thread(() -> processes.forEach(Process::destroy));
     Runtime.getRuntime().addShutdownHook(destroyProcesses);
+
+    // Keep boot process alive so that the other processes don't die because of the shutdown hook.
     while (true);
   }
 
@@ -66,12 +68,10 @@ public class Boot {
   }
 
   private static String classpath() {
-    final String bootUri =
-        Boot.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+    final String bootUri = Boot.class.getProtectionDomain().getCodeSource().getLocation().getPath();
     final String mappedBusUri =
         bootUri.substring(0, bootUri.length() - 5) + "/lib/mappedbus-0.5.jar";
     final String result = bootUri + ":" + mappedBusUri;
     return result;
   }
-
 }

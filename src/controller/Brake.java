@@ -19,5 +19,4 @@ public class Brake implements IBrake {
     // TODO Auto-generated method stub
 
   }
-
 }
