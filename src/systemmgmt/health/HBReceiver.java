@@ -34,7 +34,7 @@ public class HBReceiver {
       busReader = new MappedBusReader(heartbeatBus, 100000L, 32);
       busReader.open();
       lossDetectors = new HashMap<>();
-      lossInterval = interval * 2L;
+      lossInterval = interval * 3L / 2L;
       this.timeUnit = timeUnit;
       nodeGroups = new HashMap<>();
     } catch (final IOException e) {
@@ -99,14 +99,16 @@ public class HBReceiver {
 
   private synchronized void died(final String sender, final String group) {
     final NodeGroup ng = nodeGroups.get(group);
-    System.out.println("[HBReceiver] " + sender + " has died. Rebooting it...");
     Boot.spawnFor(sender);
     if (ng.active.sender.equals(sender)) {
+      System.out.println("[HBReceiver] " + sender + " was ACTIVE and died. Rebooting it...");
       final Node active = ng.swapActive();
       if (active == null)
         System.out.println("[HBReceiver] No swapping alternative");
       else
         System.out.println("[HBReceiver] Swapped to " + active.sender);
+    } else {
+      System.out.println("[HBReceiver] " + sender + " was INACTIVE and died. Rebooting it...");
     }
   }
 

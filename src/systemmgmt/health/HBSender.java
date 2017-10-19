@@ -41,8 +41,7 @@ public class HBSender {
   public synchronized void enable(final ScheduledExecutorService executor) {
     if (executor != null) {
       this.executor = executor;
-      senderFuture = executor.scheduleAtFixedRate(() -> sendHeartbeat(), (INTERVAL + 9L) / 10L,
-          INTERVAL, timeUnit);
+      senderFuture = executor.scheduleAtFixedRate(() -> sendHeartbeat(), 0, INTERVAL, timeUnit);
     }
   }
 
@@ -50,6 +49,7 @@ public class HBSender {
     if (senderFuture != null)
       senderFuture.cancel(false);
     senderFuture = null;
+    executor.shutdown();
   }
 
   private synchronized void sendHeartbeat() {
