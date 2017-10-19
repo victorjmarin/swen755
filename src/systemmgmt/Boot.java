@@ -1,104 +1,77 @@
 package systemmgmt;
 
+import static systemmgmt.health.ProcessName.HB_RECEIVER;
+import static systemmgmt.health.ProcessName.OBSTACLE_DETECTION_1;
+import static systemmgmt.health.ProcessName.OBSTACLE_DETECTION_2;
 import java.io.File;
 import java.io.IOException;
-import java.lang.ProcessBuilder.Redirect;
-import java.net.URLClassLoader;
 import java.util.ArrayList;
-import controller.Brake;
+import java.util.concurrent.Executors;
 import perception.ObstacleDetection;
-import systemmgmt.health.HeartbeatReceiver;
-import systemmgmt.health.Monitor;
+import systemmgmt.health.HBReceiver;
+import systemmgmt.health.ProcessName;
 
 public class Boot {
 
-  public static final ArrayList<Process> processes = new ArrayList<Process>();
+  private static final String[] MODULES = {HB_RECEIVER, OBSTACLE_DETECTION_1, OBSTACLE_DETECTION_2};
 
-  /**
-   * @param args the processName to start or nothing to run main initialization
-   * @throws InterruptedException
-   */
-  public static void main(final String[] args) throws InterruptedException {
+  private final static ArrayList<Process> processes = new ArrayList<Process>();
+
+  public static void main(final String[] args) throws IOException, InterruptedException {
+
+    if (args.length == 1) {
+      final String name = args[0];
+      boot(name);
+      return;
+    }
+
+    new File("bus/heartbeat").delete();
+
+    for (final String m : MODULES) {
+      spawnFor(m);
+    }
+
+    final Thread destroyProcesses = new Thread(() -> processes.forEach(Process::destroy));
+    Runtime.getRuntime().addShutdownHook(destroyProcesses);
+    while (true);
+  }
+
+  public static void spawnFor(final String name) {
     try {
-      final URLClassLoader url = (URLClassLoader) Thread.currentThread().getContextClassLoader();
-      String jarPath = url.getURLs()[0].toString();
-      final int fileGarbage = jarPath.indexOf('/');
-      jarPath = jarPath.substring(fileGarbage, jarPath.length());
-
-      // Otherwise, start the specific process
-      final String heartbeatFilename =
-          jarPath.substring(0, jarPath.length() - 7) + "heartbeat_communication";
-      final String monitorFilename =
-          jarPath.substring(0, jarPath.length() - 7) + "monitor_communication";
-
-      // First, check if this was the normal boot
-      if (args.length == 0) {
-
-        // Remove old files
-        {
-          final File file = new File(heartbeatFilename);
-          if (file.exists()) {
-            file.delete();
-          }
-          final File file2 = new File(monitorFilename);
-          if (file2.exists()) {
-            file2.delete();
-          }
-        }
-
-        // Start all the processes
-        for (int i = 1; i <= 4; ++i) {
-          final ProcessBuilder pb =
-              new ProcessBuilder("java", "-Dname=" + getName(i), "-jar", jarPath, "" + i);
-          pb.redirectOutput(Redirect.INHERIT);
-          pb.redirectError(Redirect.INHERIT);
-          processes.add(pb.start());
-        }
-        Runtime.getRuntime().addShutdownHook(new Thread() {
-          @Override
-          public void run() {
-            for (final Process p : processes) {
-              p.destroy();
-            }
-          }
-        });
-        while (true);
-      }
-
-
-      final int processName = Integer.parseInt(args[0]);
-
-      switch (processName) {
-        case 1:
-          new Monitor(monitorFilename).run();
-          break;
-        case 2:
-          new HeartbeatReceiver(heartbeatFilename, monitorFilename).run();
-          break;
-        case 3:
-          new Brake(heartbeatFilename, 3).run();
-          break;
-        case 4:
-          new ObstacleDetection(heartbeatFilename, 4).run();
-          break;
-      }
-
+      final ProcessBuilder pb = new ProcessBuilder("java", "-Dname=" + name, "-cp", classpath(),
+          Boot.class.getName(), name);
+      pb.inheritIO();
+      Process p;
+      p = pb.start();
+      processes.add(p);
     } catch (final IOException e) {
       e.printStackTrace();
     }
   }
 
-  private static String getName(final int i) {
-    switch (i) {
-      case 1:
-        return "Monitor";
-      case 2:
-        return "HeartbeatReceiver";
-      case 3:
-        return "Brake";
-      case 4:
-        return "ObstacleDetection";
+  private static void boot(final String name) {
+    switch (name) {
+      case OBSTACLE_DETECTION_1:
+        new ObstacleDetection(ProcessName.OBSTACLE_DETECTION_1).run();
+        break;
+      case OBSTACLE_DETECTION_2:
+        new ObstacleDetection(ProcessName.OBSTACLE_DETECTION_2).run();
+        break;
+      case HB_RECEIVER:
+        final HBReceiver hbReceiver = new HBReceiver("bus/heartbeat");
+        hbReceiver.register(OBSTACLE_DETECTION_1, "ObstacleDetection");
+        hbReceiver.register(OBSTACLE_DETECTION_2, "ObstacleDetection");
+        hbReceiver.enable(Executors.newSingleThreadScheduledExecutor());
     }
-    return "java";
   }
+
+  private static String classpath() {
+    final String bootUri =
+        Boot.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+    final String mappedBusUri =
+        bootUri.substring(0, bootUri.length() - 5) + "/lib/mappedbus-0.5.jar";
+    final String result = bootUri + ":" + mappedBusUri;
+    return result;
+  }
+
 }

@@ -1,7 +1,6 @@
 package perception;
 
 import java.util.Set;
-
 import perception.object.EnvObject;
 
 public interface IObstacleDetection {
@@ -15,12 +14,5 @@ public interface IObstacleDetection {
      * @return The subset of the environment objects that are obstacles.
      */
     Set<EnvObject> detectObstacles(Set<EnvObject> objects);
-
-    /**
-     * Returns the force of the last collision.
-     * 
-     * @return The collision force in N.
-     */
-    double getCollisionForce();
-
+    
 }
