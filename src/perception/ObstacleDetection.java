@@ -9,10 +9,11 @@ import systemmgmt.health.HBSender;
 
 public class ObstacleDetection implements IObstacleDetection {
 
+  public static final String GROUP = "ObstacleDetection";
   private final HBSender hbSender;
 
   public ObstacleDetection(final String sender) {
-    hbSender = new HBSender("bus/heartbeat", sender, "ObstacleDetection");
+    hbSender = new HBSender("bus/heartbeat", sender, GROUP);
     hbSender.enable(Executors.newSingleThreadScheduledExecutor());
   }
 

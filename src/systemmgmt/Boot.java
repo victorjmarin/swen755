@@ -61,8 +61,8 @@ public class Boot {
         break;
       case HB_RECEIVER:
         final HBReceiver hbReceiver = new HBReceiver("bus/heartbeat");
-        hbReceiver.register(OBSTACLE_DETECTION_1, "ObstacleDetection");
-        hbReceiver.register(OBSTACLE_DETECTION_2, "ObstacleDetection");
+        hbReceiver.register(OBSTACLE_DETECTION_1, ObstacleDetection.GROUP);
+        hbReceiver.register(OBSTACLE_DETECTION_2, ObstacleDetection.GROUP);
         hbReceiver.enable(Executors.newSingleThreadScheduledExecutor());
     }
   }
