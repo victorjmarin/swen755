@@ -12,8 +12,8 @@ public class ObstacleDetection implements IObstacleDetection {
   public static final String GROUP = "ObstacleDetection";
   private final HBSender hbSender;
 
-  public ObstacleDetection(final String sender) {
-    hbSender = new HBSender("bus/heartbeat", sender, GROUP);
+  public ObstacleDetection(final String heartbeatBus, final String sender) {
+    hbSender = new HBSender(heartbeatBus, sender, GROUP);
     hbSender.enable(Executors.newSingleThreadScheduledExecutor());
   }
 

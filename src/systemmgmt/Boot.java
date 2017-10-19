@@ -13,6 +13,9 @@ import systemmgmt.health.ProcessName;
 
 public class Boot {
 
+  // Pointing to /dev/shm/heartbeat will use a RAM-based bus (Only GNU/Linux)
+  public static final String HEARTBEAT_BUS = "bus/heartbeat";
+
   private static final String[] MODULES = {HB_RECEIVER, OBSTACLE_DETECTION_1, OBSTACLE_DETECTION_2};
 
   private final static ArrayList<Process> processes = new ArrayList<Process>();
@@ -25,7 +28,7 @@ public class Boot {
       return;
     }
 
-    new File("bus/heartbeat").delete();
+    new File(HEARTBEAT_BUS).delete();
 
     for (final String m : MODULES) {
       spawnFor(m);
@@ -54,13 +57,13 @@ public class Boot {
   private static void boot(final String name) {
     switch (name) {
       case OBSTACLE_DETECTION_1:
-        new ObstacleDetection(ProcessName.OBSTACLE_DETECTION_1).run();
+        new ObstacleDetection(HEARTBEAT_BUS, ProcessName.OBSTACLE_DETECTION_1).run();
         break;
       case OBSTACLE_DETECTION_2:
-        new ObstacleDetection(ProcessName.OBSTACLE_DETECTION_2).run();
+        new ObstacleDetection(HEARTBEAT_BUS, ProcessName.OBSTACLE_DETECTION_2).run();
         break;
       case HB_RECEIVER:
-        final HBReceiver hbReceiver = new HBReceiver("bus/heartbeat");
+        final HBReceiver hbReceiver = new HBReceiver(HEARTBEAT_BUS);
         hbReceiver.register(OBSTACLE_DETECTION_1, ObstacleDetection.GROUP);
         hbReceiver.register(OBSTACLE_DETECTION_2, ObstacleDetection.GROUP);
         hbReceiver.enable(Executors.newSingleThreadScheduledExecutor());
