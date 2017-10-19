@@ -7,6 +7,5 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/mappedbus-0.5.jar"/>
-	<classpathentry kind="lib" path="/Users/goal/Downloads/pj2src_20170829.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
