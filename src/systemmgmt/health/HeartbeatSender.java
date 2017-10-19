@@ -8,28 +8,32 @@ import systemmgmt.health.message.Heartbeat;
 
 public class HeartbeatSender implements IHeartbeatSender {
 
-    MappedBusWriter _writer;
-    int _pid;
-    int _processName;
+	MappedBusWriter _writer;
+	String _processName;
+	boolean _active;
 
-    public HeartbeatSender(final String filename, final int pid, final int processName) {
-	_writer = new MappedBusWriter(filename, 100000L, 32, true);
-	_pid = pid;
-	_processName = processName;
-	try {
-	    _writer.open();
-	} catch (final IOException e) {
-	    e.printStackTrace();
+	public HeartbeatSender(final String filename, final String processName, boolean active) {
+		_writer = new MappedBusWriter(filename, 100000L, 32, true);
+		_processName = processName;
+		_active = active;
+		try {
+			_writer.open();
+		} catch (final IOException e) {
+			e.printStackTrace();
+		}
 	}
-    }
 
-    @Override
-    public void sendHeartbeat() {
-	try {
-	    _writer.write(new Heartbeat(_pid, System.currentTimeMillis(), _processName));
-	} catch (final EOFException e) {
-	    e.printStackTrace();
+	@Override
+	public void sendHeartbeat() {
+		try {
+			_writer.write(new Heartbeat(System.currentTimeMillis(), _processName, _active));
+		} catch (final EOFException e) {
+			e.printStackTrace();
+		}
 	}
-    }
+
+	public void swapStatus() {
+		_active = !_active;
+	}
 
 }

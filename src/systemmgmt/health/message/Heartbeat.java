@@ -5,14 +5,14 @@ import io.mappedbus.MemoryMappedFile;
 
 public class Heartbeat implements MappedBusMessage {
 
-	public int processId;
 	public long timestamp;
-	public int processName;
+	public String processName;
+	public boolean active;
 
-	public Heartbeat(int processId, long timestamp, int processName) {
-		this.processId = processId;
+	public Heartbeat(long timestamp, String processName, boolean active) {
 		this.timestamp = timestamp;
 		this.processName = processName;
+		this.active = active;
 	}
 
 	public Heartbeat() {
@@ -20,16 +20,21 @@ public class Heartbeat implements MappedBusMessage {
 
 	@Override
 	public void write(MemoryMappedFile mem, long pos) {
-		mem.putInt(pos, processId);
-		mem.putInt(pos + 4, processName);
-		mem.putLong(pos + 8, timestamp);
+		int processNameLen = processName.getBytes().length;
+		mem.putInt(pos, processNameLen);
+		mem.setBytes(pos + 4, processName.getBytes(), 0, processNameLen);
+		mem.putLong(pos + 4 + processNameLen, timestamp);
+		mem.putByte(pos + 12 + processNameLen, (byte) (active ? 1 : 0));
 	}
 
 	@Override
 	public void read(MemoryMappedFile mem, long pos) {
-		processId = mem.getInt(pos);
-		processName = mem.getInt(pos + 4);
-		timestamp = mem.getLong(pos + 8);
+		int len = mem.getInt(pos);
+		byte[] data = new byte[len];
+		mem.getBytes(pos + 4, data, 0, len);
+		processName = new String(data);
+		timestamp = mem.getLong(pos + 4 + len);
+		active = mem.getByte(pos + 12 + len) == 1 ? true : false;
 	}
 
 	@Override

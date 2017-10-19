@@ -5,28 +5,33 @@ import io.mappedbus.MemoryMappedFile;
 
 public class Fault implements MappedBusMessage {
 
-    public int processName;
+	public String processName;
 
-    public Fault() {
-    }
+	public Fault() {
+	}
 
-    public Fault(final int processName) {
-	this.processName = processName;
-    }
+	public Fault(final String processName) {
+		this.processName = processName;
+	}
 
-    @Override
-    public void write(final MemoryMappedFile mem, final long pos) {
-	mem.putInt(pos, processName);
-    }
+	@Override
+	public void write(final MemoryMappedFile mem, final long pos) {
+		int len = processName.getBytes().length;
+		mem.putInt(pos, len);
+		mem.setBytes(pos + 4, processName.getBytes(), 0, len);
+	}
 
-    @Override
-    public void read(final MemoryMappedFile mem, final long pos) {
-	processName = mem.getInt(pos);
-    }
+	@Override
+	public void read(final MemoryMappedFile mem, final long pos) {
+		int len = mem.getInt(pos);
+		byte[] data = new byte[len];
+		mem.getBytes(pos + 4, data, 0, len);
+		processName = new String(data);
+	}
 
-    @Override
-    public int type() {
-	return 1;
-    }
+	@Override
+	public int type() {
+		return 1;
+	}
 
 }

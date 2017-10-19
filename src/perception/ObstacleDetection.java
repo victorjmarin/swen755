@@ -9,11 +9,12 @@ import systemmgmt.health.HeartbeatSender;
 
 public class ObstacleDetection implements IObstacleDetection {
 
-    private static final int PROCESS_NAME = 4;
+    public static final String PROCESS_NAME_ACTIVE = "ObstacleDetectionActive";
+    public static final String PROCESS_NAME_PASSIVE = "ObstacleDetectionPassive";
     private final HeartbeatSender _heartbeat;
 
-    public ObstacleDetection(final String heartbeatFilename, final int pid) {
-	_heartbeat = new HeartbeatSender(heartbeatFilename, pid, PROCESS_NAME);
+    public ObstacleDetection(final String heartbeatFilename, String processName, boolean active) {
+	_heartbeat = new HeartbeatSender(heartbeatFilename, processName, active);
     }
 
     public void run() {
@@ -25,7 +26,7 @@ public class ObstacleDetection implements IObstacleDetection {
 	    detectObstacles(new HashSet<EnvObject>());
 
 	    try {
-		Thread.sleep(500); // Pretend we are doing a long computation
+		Thread.sleep(1000); // Pretend we are doing a long computation
 	    } catch (final InterruptedException e) {
 	    }
 	}
