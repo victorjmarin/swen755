@@ -3,8 +3,9 @@
 
 Github repo: https://github.com/victorjmarin/swen755.git
 
-####### The list of frameworks used: Mapped pass
-/n The progamming language used: Java
+
+The list of frameworks used: Mapped pass
+<br /> The progamming language used: Java
 
 ### Instructions to run the code:
 
