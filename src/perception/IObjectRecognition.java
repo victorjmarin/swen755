@@ -1,6 +1,6 @@
 package perception;
 
-import java.util.List;
+import java.util.Set;
 
 import perception.object.EnvObject;
 
@@ -11,15 +11,8 @@ public interface IObjectRecognition {
      * 
      * @param radius
      *            The scanning radius
-     * @return A list of environment objects around the car
+     * @return A set of environment objects around the car
      */
-    List<EnvObject> recognizeEnvironment(int radius);
-
-    /**
-     * Searches for free parking slots in the proximity of the car.
-     * 
-     * @return A list of available parking slots.
-     */
-    List<EnvObject> findFreeParkingSlots();
+	Set<EnvObject> recognizeObject(Set<EnvObject> objects);
 
 }
