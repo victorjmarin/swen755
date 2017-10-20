@@ -4,7 +4,7 @@
 Github repo: https://github.com/victorjmarin/swen755.git
 
 
-The list of frameworks used: Mapped pass
+The list of frameworks used: [Mapped Bus](https://github.com/caplogic/Mappedbus)
 <br /> The progamming language used: Java
 
 ### Instructions to run the code:
